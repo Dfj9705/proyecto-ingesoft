@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /public/
+Allow: /images/
+Allow: /files/
+Allow: /video/
