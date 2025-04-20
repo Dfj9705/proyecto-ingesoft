@@ -79,5 +79,3 @@ const registrar = async (e) => {
 }
 
 formRegistro.addEventListener('submit', registrar)
-formRegistro.cuenta.addEventListener('input', soloNumeros)
-formRegistro.dpi.addEventListener('input', soloNumeros)

@@ -414,4 +414,59 @@ class ActiveRecord
         $stmt->closeCursor();
         return $data;
     }
+
+    /**
+     * Realiza una búsqueda en la tabla según condiciones.
+     *
+     * @param string|array $columna Nombre de la columna o array de condiciones [['columna', 'valor', 'condición']]
+     * @param mixed $valor Valor si se usa una sola columna.
+     * @param string $condicion Operador de comparación (=, >, <, LIKE, etc.).
+     * @param array $additionalConditions Condiciones adicionales opcionales.
+     * @param string|null $orderBy Campo de ordenamiento opcional.
+     * @return array Lista de resultados como instancias del modelo.
+     */
+    public static function where($columna, $valor = null, $condicion = '=', $additionalConditions = [], $orderBy = null)
+    {
+        $params = [];
+        $whereClause = [];
+
+        if (is_array($columna)) {
+            $conditions = $columna;
+        } else {
+            $conditions = [[$columna, $valor, $condicion]];
+        }
+
+        if (!empty($additionalConditions)) {
+            $conditions = array_merge($conditions, $additionalConditions);
+        }
+
+        foreach ($conditions as $index => $condition) {
+            if (!is_array($condition) || count($condition) < 2) {
+                throw new InvalidArgumentException('Cada condición debe tener al menos columna y valor.');
+            }
+            list($col, $val, $op) = array_pad($condition, 3, '=');
+            $paramName = ":param$index";
+            $whereClause[] = "$col $op $paramName";
+            $params[$paramName] = $val;
+        }
+
+        $query = "SELECT * FROM " . static::$tabla . " WHERE " . implode(' AND ', $whereClause);
+        if ($orderBy) {
+            $query .= " ORDER BY $orderBy";
+        }
+
+        $stmt = self::$db->prepare($query);
+        foreach ($params as $param => $val) {
+            $stmt->bindValue($param, $val);
+        }
+        $stmt->execute();
+
+        $array = [];
+        while ($registro = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $array[] = static::crearObjeto($registro);
+        }
+        $stmt->closeCursor();
+        return $array;
+    }
+
 }

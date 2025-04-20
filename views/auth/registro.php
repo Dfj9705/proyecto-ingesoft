@@ -25,16 +25,8 @@
                             <form class="needs-validation" novalidate id="formRegistro">
                                 <div class="row mb-3">
                                     <div class="col-12 mb-2">
-                                        <label for="cuenta" class="form-label">No. de cuenta</label>
-                                        <input type="text" name="cuenta" class="form-control" id="cuenta" required>
-                                        <div class="invalid-feedback">Ingrese su numero de cuenta.</div>
-
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-12 mb-2">
-                                        <label for="dpi" class="form-label">No. de DPI</label>
-                                        <input type="text" name="dpi" class="form-control" id="dpi" required>
+                                        <label for="nombre" class="form-label">Nombre completo</label>
+                                        <input type="text" name="nombre" class="form-control" id="nombre" required>
                                         <div class="invalid-feedback">Ingrese su numero de DPI.</div>
 
                                     </div>

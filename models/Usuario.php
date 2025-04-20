@@ -75,4 +75,25 @@ class Usuario extends ActiveRecord
         $this->verificado = $args['verificado'] ?? 0;
         $this->creado_en = $args['creado_en'] ?? date('Y-m-d H:i:s');
     }
+
+    /**
+     * Verifica si un correo electrónico ya existe en la tabla de usuarios.
+     *
+     * @param string $email Correo electrónico a verificar.
+     * @return bool true si el correo existe, false en caso contrario.
+     *
+     */
+    public static function existeEmail($email): bool
+    {
+        $email = trim($email);
+        $conteo = self::countWhere(
+            [
+                ['email', $email, '=']
+            ]
+        );
+
+
+
+        return $conteo > 0;
+    }
 }

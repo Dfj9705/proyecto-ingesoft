@@ -63,32 +63,6 @@ class AuthController
         $db = Usuario::getDB();
         $db->beginTransaction();
         $data = sanitizar($_POST);
-        $cuenta = Cuenta::joinWhere(
-            [['personas', 'cue_persona_id', 'per_id']],
-            [['cue_numero', $data['cuenta']]],
-        )[0];
-
-        if (!$cuenta) {
-            http_response_code(response_code: 400);
-            echo json_encode([
-                'codigo' => 2,
-                'mensaje' => 'Error al registrarse',
-                'detalle' => 'La cuenta ingresada no existe'
-            ]);
-            $db->rollBack();
-            exit;
-        }
-
-        if ($cuenta->per_dpi != $data['dpi']) {
-            http_response_code(response_code: 400);
-            echo json_encode([
-                'codigo' => 2,
-                'mensaje' => 'Error al registrarse',
-                'detalle' => 'La cuenta ingresada no coincide con el DPI ingresado'
-            ]);
-            $db->rollBack();
-            exit;
-        }
 
         if ($data['password'] != $data['password2']) {
             http_response_code(response_code: 400);
@@ -114,20 +88,19 @@ class AuthController
         try {
             $token = uniqid();
             $usuario = new Usuario([
-                'usu_email' => $data['correo'],
-                'usu_password' => password_hash($data['password'], PASSWORD_DEFAULT),
-                'usu_persona' => $cuenta->per_id,
-                'usu_token' => $token,
-                'usu_rol' => 3,
-                'usu_estado' => 1,
+                'email' => $data['correo'],
+                'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+                'nombre' => $data['nombre'],
+                'token' => $token,
+                'rol' => 2,
             ]);
 
             $email = new Email();
             $html = $router->load('email/registro', [
-                'nombre' => $cuenta->per_nombre1,
+                'nombre' => $data['nombre'],
                 'token' => $token,
             ]);
-            $enviado = $email->generateEmail("Registro exitoso", [$usuario->usu_email], $html)->send();
+            $enviado = $email->generateEmail("Registro exitoso", [$data['correo']], $html)->send();
             if ($enviado) {
 
                 $usuario->crear();
@@ -289,12 +262,12 @@ class AuthController
         $token = $_GET['t'];
 
         try {
-            $usuario = Usuario::where('usu_token', $token)[0];
+            $usuario = Usuario::where('token', $token)[0];
 
             if ($usuario) {
                 $usuario->sincronizar([
-                    'usu_verificado' => 1,
-                    'usu_token' => ''
+                    'verificado' => 1,
+                    'token' => ''
                 ]);
 
                 $usuario->actualizar();
