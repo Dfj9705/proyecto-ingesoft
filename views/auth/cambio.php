@@ -21,7 +21,7 @@
                             </div>
 
                             <form class="needs-validation" novalidate id="formCambio">
-                                <input type="hidden" name="usu_id" value="<?= base64_encode($id) ?>">
+                                <input type="hidden" name="id" value="<?= base64_encode($id) ?>">
                                 <div class="row mb-3">
                                     <div class="col-12 mb-2">
                                         <label for="correo" class="form-label">Correo electrónico</label>

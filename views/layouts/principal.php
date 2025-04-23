@@ -61,7 +61,7 @@
 
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                             <li class="dropdown-header">
-                                <h6><?= $_SESSION['user']->nombre ? $_SESSION['user']->nombre . " " . $_SESSION['user']->apellido : "Nombre de Usuario" ?>
+                                <h6><?= $_SESSION['user']->nombre ? $_SESSION['user']->nombre : "Nombre de Usuario" ?>
                                 </h6>
                                 <span><?= $_SESSION['user']->rol ?? "Rol" ?></span>
                             </li>
@@ -87,71 +87,25 @@
         <aside id="sidebar" class="sidebar">
 
             <ul class="sidebar-nav" id="sidebar-nav">
-                <?php if ($_SESSION['user']->rol == 'USUARIO'): ?>
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" data-bs-target="#usuario" data-bs-toggle="collapse" href="#">
-                                    <i class="fas fa-users"></i><span>Usuario</span><i class="bi bi-chevron-down ms-auto"></i>
-                                </a>
-                                <ul id="usuario" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                                    <li>
-                                        <a href="/mis-cuentas">
-                                            <i class="bi bi-circle"></i>
-                                            <span>Mis Cuentas</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/terceros">
-                                            <i class="bi bi-circle"></i>
-                                            <span>Tercero</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                <?php endif ?>
-                <?php if ($_SESSION['user']->rol == 'CAJERO'): ?>
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" data-bs-target="#cajero" data-bs-toggle="collapse" href="#">
-                                    <i class="fas fa-cash-register"></i><span>Cajero</span><i
-                                        class="bi bi-chevron-down ms-auto"></i>
-                                </a>
-                                <ul id="cajero" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                                    <li>
-                                        <a href="/cuentas">
-                                            <i class="bi bi-circle"></i>
-                                            <span>Cuentas</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/cajero">
-                                            <i class="bi bi-circle"></i>
-                                            <span>Cajero</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                <?php endif ?>
-                <?php if ($_SESSION['user']->rol == 'ADMINISTRADOR'): ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#administracion" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-gear"></i><span>Administración</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="administracion" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="/proyectos">
+                                <i class="bi bi-circle"></i><span>Proyectos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/monitor">
+                                <i class="bi bi-circle"></i><span>Monitor</span>
+                            </a>
+                        </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link collapsed" data-bs-target="#administracion" data-bs-toggle="collapse" href="#">
-                                    <i class="bi bi-gear"></i><span>Administración</span><i class="bi bi-chevron-down ms-auto"></i>
-                                </a>
-                                <ul id="administracion" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                                    <li>
-                                        <a href="/admin/cajeros">
-                                            <i class="bi bi-circle"></i><span>Cajeros</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/admin/monitor">
-                                            <i class="bi bi-circle"></i><span>Monitor</span>
-                                        </a>
-                                    </li>
+                    </ul>
+                </li><!-- End Forms Nav -->
 
-                                </ul>
-                            </li><!-- End Forms Nav -->
-
-                <?php endif ?>
             </ul>
 
 

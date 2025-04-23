@@ -22,14 +22,14 @@ class AuthController
     {
         isNotAuth();
         $token = htmlspecialchars($_GET['t']);
-        $usuario = Usuario::where('usu_token', $token)[0];
+        $usuario = Usuario::where('token', $token)[0];
 
         if ($usuario && $token != '') {
-            $usuario->usu_token = '';
+            $usuario->token = '';
             $usuario->actualizar();
             $router->render('auth/cambio', [
-                'email' => $usuario->usu_email,
-                'id' => $usuario->usu_id,
+                'email' => $usuario->email,
+                'id' => $usuario->id,
             ], 'layouts/auth');
         } else {
             $router->render('auth/error', [
@@ -150,7 +150,7 @@ class AuthController
             $correo = $data['correo'];
             $password = $data['password'];
 
-            $usuario = Usuario::joinWhere([['roles', 'usuarios.rol_id', 'roles.id']], [['email', $correo, '=']])[0];
+            $usuario = Usuario::joinWhere([['roles', 'usuarios.rol_id', 'roles.id']], [['email', $correo, '=']], null, "usuarios.*, roles.nombre as rol")[0];
             if (!$usuario) {
                 echo json_encode([
                     'codigo' => 2,
@@ -211,7 +211,7 @@ class AuthController
             $token = uniqid();
             $usuario = Usuario::find($_SESSION['user']->id);
             $usuario->sincronizar([
-                "usu_token" => $token,
+                "token" => $token,
             ]);
             $usuario->actualizar();
             $email = new Email();
@@ -219,7 +219,7 @@ class AuthController
                 'nombre' => $_SESSION['user']->nombre,
                 'token' => $token,
             ]);
-            $enviado = $email->generateEmail("Verificar correo", [$usuario->usu_email], $html)->send();
+            $enviado = $email->generateEmail("Verificar correo", [$usuario->email], $html)->send();
             if ($enviado) {
 
                 http_response_code(200);
@@ -288,18 +288,18 @@ class AuthController
         try {
             $correo = filter_var($_POST['correo'], FILTER_SANITIZE_EMAIL);
 
-            $consulta = Usuario::where("usu_email", $correo, "=");
+            $consulta = Usuario::where("email", $correo, "=");
             $usuario = (array) $consulta[0];
             if (count($consulta) > 0) {
-                if ($usuario['usu_estado'] == 1 && $usuario['usu_verificado'] == 1) {
+                if ($usuario['verificado'] == 1) {
                     $uniId = uniqid();
                     $usuarioObj = new Usuario($usuario);
-                    $usuarioObj->usu_token = $uniId;
+                    $usuarioObj->token = $uniId;
                     $usuarioObj->actualizar();
 
                     $email = new Email();
                     $html = $router->load('email/cambio', ['token' => $uniId]);
-                    $enviado = $email->generateEmail("SOLICITUD DE CAMBIO DE CONTRASEÑA", [$usuarioObj->usu_email], $html)->send();
+                    $enviado = $email->generateEmail("SOLICITUD DE CAMBIO DE CONTRASEÑA", [$usuarioObj->email], $html)->send();
 
                     echo json_encode([
                         'codigo' => 1,
@@ -336,7 +336,7 @@ class AuthController
         getHeadersApi();
 
         $db = Usuario::getDB();
-        $_POST['usu_id'] = base64_decode($_POST['usu_id']);
+        $_POST['id'] = base64_decode($_POST['id']);
         $db->beginTransaction();
         $data = sanitizar($_POST);
 
@@ -351,9 +351,9 @@ class AuthController
 
         try {
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-            $usuario = Usuario::find($data['usu_id']);
+            $usuario = Usuario::find($data['id']);
             $usuario->sincronizar([
-                'usu_password' => $data['password']
+                'password' => $data['password']
             ]);
 
             $actualizado = $usuario->actualizar();
