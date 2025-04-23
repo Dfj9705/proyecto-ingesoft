@@ -2,8 +2,10 @@
 
 namespace Controllers;
 
+use Model\ProyectoPersona;
 use MVC\Router;
 use Exception;
+use PDO;
 
 /**
  * Controlador de la aplicación principal
@@ -19,7 +21,32 @@ class AppController
     {
         isAuth();
         isVerified();
-        $router->render('pages/index', []);
+
+        $usuario_id = $_SESSION['user']->id;
+        $db = ProyectoPersona::getDB();
+        $sql = "
+        SELECT p.*, 
+               CASE 
+                   WHEN p.creado_por = :usuario THEN 'creador'
+                   ELSE pp.rol_asignado 
+               END as rol_asignado
+        FROM proyectos p
+        LEFT JOIN proyecto_persona pp 
+               ON p.id = pp.proyecto_id AND pp.usuario_id = :usuario
+        WHERE p.creado_por = :usuario 
+           OR pp.usuario_id = :usuario
+        GROUP BY p.id
+        ORDER BY p.fecha_inicio DESC
+    ";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute(['usuario' => $usuario_id]);
+        $proyectos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $router->render('pages/index', [
+            'proyectos' => $proyectos
+        ]);
     }
+
 
 }

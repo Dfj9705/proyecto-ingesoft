@@ -2,10 +2,11 @@
 
 namespace Controllers;
 
-use Model\ProyectoPersona;
+use PDO;
+use Exception;
 use MVC\Router;
 use Model\Proyecto;
-use Exception;
+use Model\ProyectoPersona;
 
 /**
  * Controlador del módulo de proyectos en formato API
@@ -173,4 +174,56 @@ class ProyectoController
             ]);
         }
     }
+    public static function ver(Router $router)
+    {
+        isAuth();
+        isVerified();
+
+        $usuario_id = $_SESSION['user']->id;
+        $id = $_GET['id'] ?? null;
+
+        if (!$id || !is_numeric($id)) {
+            header('Location: /proyectos');
+            return;
+        }
+
+        $db = ProyectoPersona::getDB();
+
+        $sql = "SELECT p.*, 
+                pp.rol_asignado
+            FROM proyectos p
+            LEFT JOIN proyecto_persona pp 
+                ON p.id = pp.proyecto_id AND pp.usuario_id = :usuario
+            WHERE p.id = :id
+            AND (p.creado_por = :usuario OR pp.usuario_id = :usuario)
+            LIMIT 1";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute([
+            'usuario' => $usuario_id,
+            'id' => $id
+        ]);
+        $proyecto = $stmt->fetch(PDO::FETCH_ASSOC);
+        $asignados = [];
+
+        $sqlAsignados = "SELECT u.id as usuario_id, u.nombre, u.email, pp.rol_asignado
+            FROM proyecto_persona pp
+            INNER JOIN usuarios u ON pp.usuario_id = u.id
+            WHERE pp.proyecto_id = ?
+            ORDER BY u.nombre ASC
+        ";
+        $stmt2 = $db->prepare($sqlAsignados);
+        $stmt2->execute([$id]);
+        $asignados = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+        if (!$proyecto) {
+            header('Location: /proyectos');
+            return;
+        }
+
+        $router->render('proyectos/ver', [
+            'proyecto' => $proyecto,
+            'asignados' => $asignados
+        ]);
+    }
+
 }

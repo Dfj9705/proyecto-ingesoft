@@ -43,6 +43,7 @@ $router->post('/api/proyectos/eliminar-asignacion', [ProyectoPersonaController::
 $router->get('/api/proyectos/asignados', [ProyectoPersonaController::class, 'listarAPI']);
 $router->get('/api/proyectos/usuarios-disponibles', [ProyectoPersonaController::class, 'listarDisponiblesAPI']);
 $router->post('/api/proyectos/actualizar-rol', [ProyectoPersonaController::class, 'actualizarRolAPI']);
+$router->get('/proyectos/ver', [ProyectoController::class, 'ver']);
 
 
 $router->comprobarRutas();
