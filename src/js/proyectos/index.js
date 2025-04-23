@@ -11,6 +11,13 @@ const spanLoader = document.getElementById("spanLoader");
 const btnModificar = document.getElementById("btnModificar");
 const spanLoaderModificar = document.getElementById("spanLoaderModificar");
 const modalTitleProyecto = document.getElementById("modalTitleProyecto");
+// Modal y tabla de asignaciones
+const modalAsignacionesElement = document.getElementById("modalAsignaciones");
+const modalAsignaciones = new Modal(modalAsignacionesElement);
+const formAsignacion = document.getElementById("formAsignacion");
+const inputProyectoAsignar = document.getElementById("proyecto_id");
+const selectUsuarioAsignar = document.getElementById("usuario_id");
+
 
 spanLoader.style.display = "none";
 btnGuardar.disabled = false;
@@ -47,7 +54,22 @@ const datatableProyectos = new DataTable("#datatableProyectos", {
         }
     ]
 });
-
+const tablaAsignados = new DataTable("#tablaAsignados", {
+    data: [],
+    language: lenguaje,
+    columns: [
+        { title: "No.", render: (data, type, row, meta) => meta.row + 1 },
+        { title: "Nombre", data: "usuario_nombre" },
+        { title: "Email", data: "email" },
+        {
+            title: "Acciones",
+            data: "usuario_id",
+            render: (usuario_id, type, row) => {
+                return `<button class='btn btn-danger btn-sm eliminar-asignado' data-user='${usuario_id}'>Eliminar</button>`;
+            }
+        }
+    ]
+});
 const buscarProyectos = async () => {
     try {
         const res = await fetch("/api/proyectos");
@@ -194,29 +216,7 @@ const eliminarProyecto = async (e) => {
     }
 };
 
-// Modal y tabla de asignaciones
-const modalAsignacionesElement = document.getElementById("modalAsignaciones");
-const modalAsignaciones = new Modal(modalAsignacionesElement);
-const formAsignacion = document.getElementById("formAsignacion");
-const inputProyectoAsignar = document.getElementById("proyecto_id");
-const selectUsuarioAsignar = document.getElementById("usuario_id");
 
-const tablaAsignados = new DataTable("#tablaAsignados", {
-    data: [],
-    language: lenguaje,
-    columns: [
-        { title: "No.", render: (data, type, row, meta) => meta.row + 1 },
-        { title: "Nombre", data: "usuario_nombre" },
-        { title: "Email", data: "email" },
-        {
-            title: "Acciones",
-            data: "usuario_id",
-            render: (usuario_id, type, row) => {
-                return `<button class='btn btn-danger btn-sm eliminar-asignado' data-user='${usuario_id}'>Eliminar</button>`;
-            }
-        }
-    ]
-});
 
 const cargarAsignados = async (proyecto_id) => {
     inputProyectoAsignar.value = proyecto_id;
