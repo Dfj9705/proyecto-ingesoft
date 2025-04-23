@@ -1,5 +1,6 @@
 import { Modal } from "bootstrap";
 import { confirmacion, Toast } from "../funciones";
+import { lenguaje } from "../lenguaje";
 import DataTable from "datatables.net-bs5";
 
 const formProyecto = document.getElementById("formProyecto");
@@ -19,6 +20,7 @@ btnModificar.style.display = "none";
 
 const datatableProyectos = new DataTable("#datatableProyectos", {
     data: null,
+    language: lenguaje,
     columns: [
         { title: "No.", render: (data, type, row, meta) => meta.row + 1 },
         { title: "Nombre", data: "nombre" },
@@ -30,14 +32,17 @@ const datatableProyectos = new DataTable("#datatableProyectos", {
             data: "id",
             orderable: false,
             searchable: false,
-            render: (data) => {
-                return `<div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Acciones</button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item modificar" data-id="${data}" style="cursor:pointer"><i class="fas fa-edit me-2"></i>Modificar</a></li>
-                        <li><a class="dropdown-item eliminar text-danger" data-id="${data}" style="cursor:pointer"><i class="fas fa-trash me-2"></i>Eliminar</a></li>
-                    </ul>
-                </div>`;
+            render: (id) => {
+                return `
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Acciones</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item modificar" data-id="${id}" style="cursor:pointer"><i class="fas fa-edit me-2"></i>Modificar</a></li>
+                            <li><a class="dropdown-item eliminar text-danger" data-id="${id}" style="cursor:pointer"><i class="fas fa-trash me-2"></i>Eliminar</a></li>
+                            <li><a class="dropdown-item ver-asignados text-primary" data-id="${id}" style="cursor:pointer"><i class="fas fa-users me-2"></i>Ver asignados</a></li>
+                        </ul>
+                    </div>
+                `;
             }
         }
     ]
@@ -48,7 +53,7 @@ const buscarProyectos = async () => {
         const res = await fetch("/api/proyectos");
         const data = await res.json();
         if (data.codigo === 1) {
-            datatableProyectos.clear().rows.add(data.data).draw();
+            datatableProyectos.clear().rows.add(data.datos).draw();
         } else {
             Toast.fire({ icon: "warning", title: data.mensaje });
         }
@@ -189,6 +194,131 @@ const eliminarProyecto = async (e) => {
     }
 };
 
+// Modal y tabla de asignaciones
+const modalAsignacionesElement = document.getElementById("modalAsignaciones");
+const modalAsignaciones = new Modal(modalAsignacionesElement);
+const formAsignacion = document.getElementById("formAsignacion");
+const inputProyectoAsignar = document.getElementById("proyecto_id");
+const selectUsuarioAsignar = document.getElementById("usuario_id");
+
+const tablaAsignados = new DataTable("#tablaAsignados", {
+    data: [],
+    language: lenguaje,
+    columns: [
+        { title: "No.", render: (data, type, row, meta) => meta.row + 1 },
+        { title: "Nombre", data: "usuario_nombre" },
+        { title: "Email", data: "email" },
+        {
+            title: "Acciones",
+            data: "usuario_id",
+            render: (usuario_id, type, row) => {
+                return `<button class='btn btn-danger btn-sm eliminar-asignado' data-user='${usuario_id}'>Eliminar</button>`;
+            }
+        }
+    ]
+});
+
+const cargarAsignados = async (proyecto_id) => {
+    inputProyectoAsignar.value = proyecto_id;
+    await cargarUsuariosDisponibles(proyecto_id); // 👈 llamada aquí
+
+    try {
+        const res = await fetch(`/api/proyectos/asignados?proyecto_id=${proyecto_id}`);
+        const data = await res.json();
+        if (data.codigo === 1) {
+            tablaAsignados.clear().rows.add(data.datos).draw();
+            modalAsignaciones.show();
+        } else {
+            Toast.fire({ icon: 'warning', title: data.mensaje });
+        }
+    } catch (error) {
+        Toast.fire({ icon: 'error', title: 'Error al cargar asignaciones', text: error.message });
+    }
+};
+
+
+const asignarPersona = async (e) => {
+    e.preventDefault();
+    const body = new FormData(formAsignacion);
+
+    try {
+        const res = await fetch("/api/proyectos/asignar", {
+            method: "POST",
+            body
+        });
+        const data = await res.json();
+
+        if (data.codigo === 1) {
+            Toast.fire({ icon: 'success', title: data.mensaje });
+            cargarAsignados(body.get("proyecto_id"));
+            formAsignacion.reset();
+        } else {
+            Toast.fire({ icon: 'warning', title: data.mensaje });
+        }
+    } catch (error) {
+        Toast.fire({ icon: 'error', title: 'Error al asignar persona', text: error.message });
+    }
+};
+
+const eliminarAsignado = async (e) => {
+    const button = e.target.closest('.eliminar-asignado');
+    if (!button) return;
+
+    const usuario_id = button.dataset.user;
+    const proyecto_id = inputProyectoAsignar.value;
+    const confirmar = await confirmacion('¿Eliminar asignación?', 'warning', 'Sí, eliminar');
+    if (!confirmar) return;
+
+    const body = new FormData();
+    body.append("usuario_id", usuario_id);
+    body.append("proyecto_id", proyecto_id);
+
+    try {
+        const res = await fetch("/api/proyectos/eliminar-asignacion", {
+            method: "POST",
+            body
+        });
+        const data = await res.json();
+        if (data.codigo === 1) {
+            Toast.fire({ icon: 'success', title: data.mensaje });
+            cargarAsignados(proyecto_id);
+        } else {
+            Toast.fire({ icon: 'info', title: data.mensaje });
+        }
+    } catch (error) {
+        Toast.fire({ icon: 'error', title: 'Error al eliminar asignación', text: error.message });
+    }
+};
+
+// Evento para mostrar asignados desde el dropdown de la tabla de proyectos
+datatableProyectos.on("click", ".ver-asignados", function (e) {
+    const id = e.currentTarget.dataset.id;
+    cargarAsignados(id);
+});
+
+const cargarUsuariosDisponibles = async (proyecto_id) => {
+    try {
+        const res = await fetch(`/api/proyectos/usuarios-disponibles?proyecto_id=${proyecto_id}`);
+        const data = await res.json();
+        if (data.codigo === 1) {
+            selectUsuarioAsignar.innerHTML = '<option value="">-- Seleccione un usuario --</option>';
+            data.datos.forEach(usuario => {
+                const option = document.createElement('option');
+                option.value = usuario.id;
+                option.textContent = `${usuario.nombre} (${usuario.email})`;
+                selectUsuarioAsignar.appendChild(option);
+            });
+        } else {
+            Toast.fire({ icon: 'info', title: data.mensaje });
+        }
+    } catch (error) {
+        Toast.fire({ icon: 'error', title: 'Error al cargar usuarios', text: error.message });
+    }
+};
+
+
+formAsignacion?.addEventListener("submit", asignarPersona);
+tablaAsignados.on("click", ".eliminar-asignado", eliminarAsignado);
 formProyecto?.addEventListener("submit", guardarProyecto);
 btnModificar?.addEventListener("click", modificarProyecto);
 datatableProyectos.on("click", ".modificar", colocarDatos);

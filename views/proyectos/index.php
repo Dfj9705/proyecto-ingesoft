@@ -86,4 +86,39 @@
     </div>
 </div><!-- End Modal -->
 
+<div class="modal fade" id="modalAsignaciones" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Usuarios asignados al proyecto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAsignacion" class="row g-3 mb-4" novalidate>
+                    <input type="hidden" id="proyecto_id" name="proyecto_id">
+                    <div class="col-md-10">
+                        <label for="usuario_id" class="form-label">Seleccionar usuario</label>
+                        <select class="form-select" id="usuario_id" name="usuario_id" required>
+                            <option value="">-- Seleccione un usuario --</option>
+                            <!-- Llénalo dinámicamente desde JS o servidor -->
+                        </select>
+                        <div class="invalid-feedback">Seleccione un usuario válido.</div>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-success w-100">Asignar</button>
+                    </div>
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-sm w-100" id="tablaAsignados"></table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="<?= asset('./build/js/proyectos/index.js') ?>"></script>

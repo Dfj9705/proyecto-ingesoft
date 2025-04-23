@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Model\ProyectoPersona;
 use MVC\Router;
 use Model\Proyecto;
 use Exception;
@@ -32,11 +33,29 @@ class ProyectoController
         getHeadersApi();
 
         try {
-            $proyectos = Proyecto::all();
+            $usuario_id = $_SESSION['user']->id ?? null;
+
+            if (!$usuario_id) {
+                echo json_encode([
+                    'codigo' => 2,
+                    'mensaje' => 'Usuario no autenticado'
+                ]);
+                return;
+            }
+
+            $sql = "SELECT * FROM proyectos 
+                    WHERE creado_por = ?
+                    ORDER BY fecha_inicio DESC";
+
+            $db = ProyectoPersona::getDB(); // o Proyecto::getDB() si está disponible
+            $stmt = $db->prepare($sql);
+            $stmt->execute([$usuario_id]);
+            $proyectos = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'Lista de proyectos',
-                'data' => $proyectos
+                'mensaje' => 'Proyectos obtenidos correctamente',
+                'datos' => $proyectos
             ]);
         } catch (Exception $e) {
             http_response_code(500);

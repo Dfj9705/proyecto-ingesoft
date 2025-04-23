@@ -7,6 +7,7 @@ use Controllers\CajeroController;
 use Controllers\CuentaController;
 use Controllers\MonitorController;
 use Controllers\ProyectoController;
+use Controllers\ProyectoPersonaController;
 use Controllers\TerceroController;
 use Controllers\TransferenciaController;
 use MVC\Router;
@@ -36,6 +37,11 @@ $router->get('/api/proyectos', [ProyectoController::class, 'indexAPI']);
 $router->post('/api/proyectos/crear', [ProyectoController::class, 'crearAPI']);
 $router->post('/api/proyectos/actualizar', [ProyectoController::class, 'actualizarAPI']);
 $router->post('/api/proyectos/eliminar', [ProyectoController::class, 'eliminarAPI']);
+
+$router->post('/api/proyectos/asignar', [ProyectoPersonaController::class, 'asignarAPI']);
+$router->post('/api/proyectos/eliminar-asignacion', [ProyectoPersonaController::class, 'eliminarAPI']);
+$router->get('/api/proyectos/asignados', [ProyectoPersonaController::class, 'listarAPI']);
+$router->get('/api/proyectos/usuarios-disponibles', [ProyectoPersonaController::class, 'listarDisponiblesAPI']);
 
 
 $router->comprobarRutas();
