@@ -10,6 +10,7 @@ module.exports = {
         'js/auth/login': './src/js/auth/login.js',
         'js/auth/envio': './src/js/auth/envio.js',
         'js/auth/cambio': './src/js/auth/cambio.js',
+        'js/proyectos/index': './src/js/proyectos/index.js',
         'css/styles': ['./src/scss/app.scss'],
     },
     output: {

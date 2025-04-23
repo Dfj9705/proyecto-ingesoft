@@ -6,6 +6,7 @@ use Controllers\AuthController;
 use Controllers\CajeroController;
 use Controllers\CuentaController;
 use Controllers\MonitorController;
+use Controllers\ProyectoController;
 use Controllers\TerceroController;
 use Controllers\TransferenciaController;
 use MVC\Router;
@@ -30,7 +31,11 @@ $router->post('/registro', [AuthController::class, 'registroAPI']);
 
 
 //PROYECTOS
-$router->get('/proyecto', [AppController::class, 'index']);
+$router->get('/proyectos', [ProyectoController::class, 'index']);
+$router->get('/api/proyectos', [ProyectoController::class, 'indexAPI']);
+$router->post('/api/proyectos/crear', [ProyectoController::class, 'crearAPI']);
+$router->post('/api/proyectos/actualizar', [ProyectoController::class, 'actualizarAPI']);
+$router->post('/api/proyectos/eliminar', [ProyectoController::class, 'eliminarAPI']);
 
 
 $router->comprobarRutas();
