@@ -13,7 +13,7 @@ use Controllers\AppController;
 
 $router = new Router();
 //  $router->setBaseURL('/' . $_ENV['APP_NAME']);
-
+//AUTENTICACION
 $router->get('/', [AppController::class, 'index']);
 $router->get('/registro', [AuthController::class, 'registro']);
 $router->get('/login', [AuthController::class, 'login']);
@@ -28,6 +28,9 @@ $router->get('/logout', [AuthController::class, 'logout']);
 $router->post('/login', [AuthController::class, 'loginAPI']);
 $router->post('/registro', [AuthController::class, 'registroAPI']);
 
+
+//PROYECTOS
+$router->get('/proyecto', [AppController::class, 'index']);
 
 
 $router->comprobarRutas();
