@@ -214,4 +214,68 @@ class ProyectoPersonaController
             ]);
         }
     }
+
+    public static function actualizarRolAPI(Router $router)
+    {
+        isAuthApi();
+        getHeadersApi();
+
+        try {
+            $data = sanitizar($_POST);
+
+            $proyecto_id = $data['proyecto_id'] ?? null;
+            $usuario_id = $data['usuario_id'] ?? null;
+            $rol = $data['rol_asignado'] ?? null;
+
+            if (!$proyecto_id || !$usuario_id || !$rol) {
+                echo json_encode([
+                    'codigo' => 2,
+                    'mensaje' => 'Datos incompletos para actualizar el rol'
+                ]);
+                return;
+            }
+
+            // Validar que el rol esté permitido
+            $rolesPermitidos = ['admin', 'scrum master', 'desarrollador', 'tester', 'analista'];
+            if (!in_array(strtolower($rol), $rolesPermitidos)) {
+                echo json_encode([
+                    'codigo' => 2,
+                    'mensaje' => 'Rol no permitido',
+                    'detalle' => 'El rol ingresado no es válido'
+                ]);
+                return;
+            }
+
+            $registro = ProyectoPersona::where([
+                ['proyecto_id', $proyecto_id],
+                ['usuario_id', $usuario_id]
+            ]);
+
+            if (empty($registro)) {
+                echo json_encode([
+                    'codigo' => 2,
+                    'mensaje' => 'Asignación no encontrada'
+                ]);
+                return;
+            }
+
+            $obj = new ProyectoPersona((array) $registro[0]);
+            $obj->rol_asignado = $rol;
+            $resultado = $obj->actualizar();
+
+            echo json_encode([
+                'codigo' => 1,
+                'mensaje' => 'Rol actualizado correctamente',
+                'resultado' => $resultado
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'Error al actualizar rol',
+                'detalle' => $e->getMessage()
+            ]);
+        }
+    }
+
 }

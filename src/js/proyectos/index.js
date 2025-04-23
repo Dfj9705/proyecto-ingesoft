@@ -2,6 +2,7 @@ import { Modal } from "bootstrap";
 import { confirmacion, Toast } from "../funciones";
 import { lenguaje } from "../lenguaje";
 import DataTable from "datatables.net-bs5";
+import Swal from "sweetalert2";
 
 const formProyecto = document.getElementById("formProyecto");
 const modalProyectoElement = document.getElementById("modalProyecto");
@@ -66,7 +67,12 @@ const tablaAsignados = new DataTable("#tablaAsignados", {
             title: "Acciones",
             data: "usuario_id",
             render: (usuario_id, type, row) => {
-                return `<button class='btn btn-danger btn-sm eliminar-asignado' data-user='${usuario_id}'>Eliminar</button>`;
+                return `
+                    <div class="btn-group">
+                        <button class='btn btn-outline-primary btn-sm editar-rol' data-user='${usuario_id}' data-proyecto='${inputProyectoAsignar.value}' data-rol='${row.rol_asignado}'>Editar rol</button>
+                        <button class='btn btn-danger btn-sm eliminar-asignado' data-user='${usuario_id}'>Eliminar</button>
+                    </div>
+                `;
             }
         }
     ]
@@ -317,6 +323,55 @@ const cargarUsuariosDisponibles = async (proyecto_id) => {
     }
 };
 
+const editarRol = async (e) => {
+    const btn = e.currentTarget;
+    const usuario_id = btn.dataset.user;
+    const proyecto_id = btn.dataset.proyecto;
+    const rol_actual = btn.dataset.rol;
+
+    const { value: nuevoRol } = await Swal.fire({
+        title: 'Editar rol asignado',
+        input: 'select',
+        inputOptions: {
+            'admin': 'Administrador',
+            'scrum master': 'Scrum Master',
+            'desarrollador': 'Desarrollador',
+            'tester': 'Tester',
+            'analista': 'Analista'
+        },
+        inputValue: rol_actual,
+        showCancelButton: true,
+        confirmButtonText: 'Actualizar',
+        cancelButtonText: 'Cancelar',
+        inputValidator: (value) => {
+            if (!value) return 'Debe seleccionar un rol';
+        }
+    });
+
+    if (nuevoRol) {
+        const body = new FormData();
+        body.append("proyecto_id", proyecto_id);
+        body.append("usuario_id", usuario_id);
+        body.append("rol_asignado", nuevoRol);
+
+        try {
+            const res = await fetch("/api/proyectos/actualizar-rol", {
+                method: "POST",
+                body
+            });
+            const data = await res.json();
+
+            if (data.codigo === 1) {
+                Toast.fire({ icon: 'success', title: data.mensaje });
+                cargarAsignados(proyecto_id);
+            } else {
+                Toast.fire({ icon: 'info', title: data.mensaje });
+            }
+        } catch (error) {
+            Toast.fire({ icon: 'error', title: 'Error al actualizar el rol', text: error.message });
+        }
+    }
+}
 
 formAsignacion?.addEventListener("submit", asignarPersona);
 tablaAsignados.on("click", ".eliminar-asignado", eliminarAsignado);
@@ -324,4 +379,6 @@ formProyecto?.addEventListener("submit", guardarProyecto);
 btnModificar?.addEventListener("click", modificarProyecto);
 datatableProyectos.on("click", ".modificar", colocarDatos);
 datatableProyectos.on("click", ".eliminar", eliminarProyecto);
+tablaAsignados.on("click", ".editar-rol", editarRol);
+
 modalProyectoElement.addEventListener("hidden.bs.modal", refrescarModal);
