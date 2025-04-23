@@ -11,7 +11,7 @@
 
 <section class="section">
     <div class="row">
-        <div class="col-lg-8 mx-auto">
+        <div class="col-lg-12 mx-auto">
             <div class="card border-info">
                 <div class="card-body">
                     <h5 class="card-title"><?= htmlspecialchars($proyecto['nombre']) ?></h5>

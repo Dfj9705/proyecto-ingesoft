@@ -1,0 +1,29 @@
+.proyecto-card {
+    position: relative;
+    border: 1px solid #dee2e6;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    overflow: hidden;
+  }
+
+  .proyecto-card:hover {
+    transform: translateY(-5px);
+    border: 1px solid #0d6efd;
+    box-shadow: 0 0 15px rgba(13, 110, 253, 0.25);
+  }
+
+  .proyecto-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #0d6efd;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .proyecto-card:hover::before {
+    transform: scaleY(1);
+  }

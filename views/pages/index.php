@@ -14,7 +14,8 @@
       <?php foreach ($proyectos as $proyecto): ?>
         <div class="col-md-4 mb-4">
 
-          <div class="card shadow-sm border border-primary position-relative">
+          <div class="card shadow-sm proyecto-card">
+
             <div class="card-body">
               <h5 class="card-title"><?= htmlspecialchars($proyecto['nombre']) ?></h5>
               <p class="card-text"><?= htmlspecialchars($proyecto['descripcion']) ?></p>
@@ -42,6 +43,5 @@
     </div>
   </div>
 </div>
-
 
 <script src="<?= asset('./build/js/inicio.js') ?>"></script>
