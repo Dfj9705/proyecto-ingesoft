@@ -61,6 +61,7 @@ const tablaAsignados = new DataTable("#tablaAsignados", {
         { title: "No.", render: (data, type, row, meta) => meta.row + 1 },
         { title: "Nombre", data: "usuario_nombre" },
         { title: "Email", data: "email" },
+        { title: "Rol", data: "rol_asignado" },
         {
             title: "Acciones",
             data: "usuario_id",

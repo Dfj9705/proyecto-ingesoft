@@ -96,13 +96,25 @@
             <div class="modal-body">
                 <form id="formAsignacion" class="row g-3 mb-4" novalidate>
                     <input type="hidden" id="proyecto_id" name="proyecto_id">
-                    <div class="col-md-10">
+                    <div class="col-md-6">
                         <label for="usuario_id" class="form-label">Seleccionar usuario</label>
                         <select class="form-select" id="usuario_id" name="usuario_id" required>
                             <option value="">-- Seleccione un usuario --</option>
                             <!-- Llénalo dinámicamente desde JS o servidor -->
                         </select>
                         <div class="invalid-feedback">Seleccione un usuario válido.</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="rol_asignado" class="form-label">Rol en el proyecto</label>
+                        <select class="form-select" id="rol_asignado" name="rol_asignado" required>
+                            <option value="">-- Seleccione un rol --</option>
+                            <option value="admin">Administrador</option>
+                            <option value="scrum master">Scrum Master</option>
+                            <option value="desarrollador">Desarrollador</option>
+                            <option value="tester">Tester</option>
+                            <option value="analista">Analista</option>
+                        </select>
+                        <div class="invalid-feedback">Seleccione un rol.</div>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <button type="submit" class="btn btn-success w-100">Asignar</button>
