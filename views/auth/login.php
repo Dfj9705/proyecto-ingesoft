@@ -25,18 +25,6 @@
                             <form class="needs-validation" novalidate id="formLogin">
                                 <div class="row mb-3">
                                     <div class="col-12 mb-2">
-                                        <label for="rol" class="form-label">Iniciar sesión como:</label>
-                                        <select name="rol" class="form-control" id="rol" required>
-                                            <option value="3">Usuario</option>
-                                            <option value="2">Cajero</option>
-                                            <option value="1">Administrador</option>
-                                        </select>
-                                        <div class="invalid-feedback">Debe seleccionar una opcion.</div>
-
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-12 mb-2">
                                         <label for="correo" class="form-label">Correo electrónico</label>
                                         <input type="email" name="correo" class="form-control" id="correo" required>
                                         <div class="invalid-feedback">Ingrese su correo electrónico.</div>

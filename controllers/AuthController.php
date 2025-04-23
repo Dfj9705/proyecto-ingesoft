@@ -149,11 +149,8 @@ class AuthController
         try {
             $correo = $data['correo'];
             $password = $data['password'];
-            $rol = $data['rol'];
 
-            $usuario = Usuario::joinWhere([['personas', 'per_id', 'usu_persona']], [['usu_email', $correo], ['usu_rol', $rol], ['usu_estado', 1]], null, "usu_id as id, usu_email as correo, per_dpi as dpi, usu_rol as rol, usu_password as password , per_nombre1 as nombre, per_apellido1 as apellido, usu_verificado as verificado")[0];
-
-
+            $usuario = Usuario::joinWhere([['roles', 'usuarios.rol_id', 'roles.id']], [['email', $correo, '=']])[0];
             if (!$usuario) {
                 echo json_encode([
                     'codigo' => 2,
@@ -170,17 +167,7 @@ class AuthController
 
             if (password_verify($password, $usuario->password)) {
                 unset($usuario->password);
-                switch ($rol) {
-                    case '1':
-                        $usuario->rol = "ADMINISTRADOR";
-                        break;
-                    case '2':
-                        $usuario->rol = "CAJERO";
-                        break;
-                    case '3':
-                        $usuario->rol = "USUARIO";
-                        break;
-                }
+
                 $_SESSION['auth'] = true;
                 $_SESSION['user'] = $usuario;
                 echo json_encode([
