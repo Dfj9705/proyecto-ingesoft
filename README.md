@@ -2,7 +2,6 @@
 ## REQUERIMIENTOS
 
  - PHP V7.2.4 o superior
- - Extensión PDO_INFORMIX
  - NODE JS V17.9.0
  - NPM V8.5
  - COMPOSER V2.3 o superior
