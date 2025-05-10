@@ -5,6 +5,7 @@ use Controllers\AdminController;
 use Controllers\AuthController;
 use Controllers\CajeroController;
 use Controllers\CuentaController;
+use Controllers\EpicaController;
 use Controllers\MonitorController;
 use Controllers\ProyectoController;
 use Controllers\ProyectoPersonaController;
@@ -44,6 +45,13 @@ $router->get('/api/proyectos/asignados', [ProyectoPersonaController::class, 'lis
 $router->get('/api/proyectos/usuarios-disponibles', [ProyectoPersonaController::class, 'listarDisponiblesAPI']);
 $router->post('/api/proyectos/actualizar-rol', [ProyectoPersonaController::class, 'actualizarRolAPI']);
 $router->get('/proyectos/ver', [ProyectoController::class, 'ver']);
+
+// Rutas para gestión de Épicas (API)
+$router->get('/api/epicas/listar', [EpicaController::class, 'listarAPI']);
+$router->post('/api/epicas/guardar', [EpicaController::class, 'guardarAPI']);
+$router->post('/api/epicas/modificar', [EpicaController::class, 'modificarAPI']);
+$router->post('/api/epicas/eliminar', [EpicaController::class, 'eliminarAPI']);
+
 
 
 $router->comprobarRutas();

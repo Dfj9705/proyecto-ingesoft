@@ -11,6 +11,7 @@ module.exports = {
         'js/auth/envio': './src/js/auth/envio.js',
         'js/auth/cambio': './src/js/auth/cambio.js',
         'js/proyectos/index': './src/js/proyectos/index.js',
+        'js/proyectos/epicas': './src/js/proyectos/epicas.js',
         'css/styles': ['./src/scss/app.scss'],
     },
     output: {
