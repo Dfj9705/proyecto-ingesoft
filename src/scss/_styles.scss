@@ -27,3 +27,21 @@
   .proyecto-card:hover::before {
     transform: scaleY(1);
   }
+
+  .kanban-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-left: 4px solid var(--bs-primary);
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0.5rem;
+    cursor: grab;
+  }
+
+  .kanban-list {
+    min-height: 300px;
+  }
+
+  .kanban-list .kanban-card:last-child {
+    margin-bottom: 0;
+  }

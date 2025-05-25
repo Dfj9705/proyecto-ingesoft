@@ -104,7 +104,7 @@ class TareaController
 
         $data = sanitizar($_POST);
 
-        if (empty($data['id']) || empty($data['titulo'])) {
+        if (empty($data['id'])) {
             echo json_encode([
                 'codigo' => 2,
                 'mensaje' => 'ID y título son requeridos'

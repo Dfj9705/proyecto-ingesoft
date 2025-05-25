@@ -36,6 +36,7 @@
     "leaflet": "^1.9.2",
     "moment": "^2.30.1",
     "sass": "^1.75.0",
+    "sortablejs": "^1.15.6",
     "sweetalert2": "^11.4.38"
   }
 }

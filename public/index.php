@@ -46,6 +46,7 @@ $router->get('/api/proyectos/asignados', [ProyectoPersonaController::class, 'lis
 $router->get('/api/proyectos/usuarios-disponibles', [ProyectoPersonaController::class, 'listarDisponiblesAPI']);
 $router->post('/api/proyectos/actualizar-rol', [ProyectoPersonaController::class, 'actualizarRolAPI']);
 $router->get('/proyectos/ver', [ProyectoController::class, 'ver']);
+$router->get('/proyectos/kanban', [ProyectoController::class, 'kanban']);
 
 // Rutas para gestión de Épicas (API)
 $router->get('/api/epicas/listar', [EpicaController::class, 'listarAPI']);

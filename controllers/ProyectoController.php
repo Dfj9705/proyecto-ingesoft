@@ -174,6 +174,25 @@ class ProyectoController
             ]);
         }
     }
+    public static function kanban(Router $router)
+    {
+        isAuth();
+        isVerified();
+
+        $proyecto_id = $_GET['id'] ?? null;
+
+        // Podrías validar si el usuario está asignado a ese proyecto
+        $proyecto = Proyecto::find($proyecto_id);
+
+        if (!$proyecto) {
+            header("Location: /proyectos");
+            return;
+        }
+
+        $router->render('proyectos/kanban', [
+            'proyecto' => (array) $proyecto
+        ]);
+    }
     public static function ver(Router $router)
     {
         isAuth();
