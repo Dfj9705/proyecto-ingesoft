@@ -5,6 +5,7 @@ namespace Controllers;
 use Exception;
 use Model\ProyectoPersona;
 use MVC\Router;
+use PDO;
 
 /**
  * Controlador para gestionar la asignación de personas a proyectos.
@@ -278,4 +279,44 @@ class ProyectoPersonaController
         }
     }
 
+    public static function listar(Router $router)
+    {
+        isAuthApi();
+        getHeadersApi();
+        header('Content-Type: application/json');
+
+        $proyecto_id = $_GET['proyecto_id'] ?? null;
+
+        if (!$proyecto_id) {
+            echo json_encode([
+                'codigo' => 2,
+                'mensaje' => 'Falta ID de proyecto'
+            ]);
+            return;
+        }
+
+        try {
+            $sql = "SELECT usuarios.id AS usuario_id, usuarios.nombre, usuarios.email
+                FROM proyecto_persona
+                INNER JOIN usuarios ON usuarios.id = proyecto_persona.usuario_id
+                WHERE proyecto_persona.proyecto_id = ?";
+
+            $stmt = ProyectoPersona::getDB()->prepare($sql);
+            $stmt->execute([$proyecto_id]);
+            $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            echo json_encode([
+                'codigo' => 1,
+                'mensaje' => 'Usuarios asignados encontrados',
+                'datos' => $datos
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'Error al obtener usuarios asignados',
+                'detalle' => $e->getMessage()
+            ]);
+        }
+    }
 }

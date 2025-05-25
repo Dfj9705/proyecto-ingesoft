@@ -12,6 +12,7 @@ module.exports = {
         'js/auth/cambio': './src/js/auth/cambio.js',
         'js/proyectos/index': './src/js/proyectos/index.js',
         'js/proyectos/epicas': './src/js/proyectos/epicas.js',
+        'js/proyectos/tareas': './src/js/proyectos/tareas.js',
         'css/styles': ['./src/scss/app.scss'],
     },
     output: {

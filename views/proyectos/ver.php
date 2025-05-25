@@ -17,6 +17,9 @@
                     <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEpicas">
                         <i class="fas fa-layer-group me-2"></i> Gestionar Épicas
                     </button>
+                    <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalTareas">
+                        <i class="fas fa-tasks me-2"></i> Ver Tareas
+                    </button>
 
                 </div>
                 <div class="card-body">
@@ -129,4 +132,87 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Tareas -->
+<div class="modal fade" id="modalTareas" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content border-info">
+            <div class="modal-header">
+                <h5 class="modal-title">Tareas del Proyecto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Tabla de Tareas -->
+                <div class="table-responsive mb-4">
+                    <table class="table table-sm table-striped table-bordered w-100" id="datatableTareas">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Título</th>
+                                <th>Estado</th>
+                                <th>Prioridad</th>
+                                <th>Asignado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <!-- Formulario de Tareas -->
+                <form id="formTarea" novalidate>
+                    <input type="hidden" name="id" id="tarea_id">
+                    <input type="hidden" name="proyecto_id" value="<?= $proyecto['id'] ?>">
+
+                    <div class="mb-3">
+                        <label for="tarea_titulo">Título</label>
+                        <input type="text" class="form-control" name="titulo" id="tarea_titulo" required>
+                        <div class="invalid-feedback">Debe ingresar un título.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tarea_descripcion">Descripción</label>
+                        <textarea class="form-control" name="descripcion" id="tarea_descripcion" rows="3"></textarea>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <label for="tarea_prioridad">Prioridad</label>
+                            <select class="form-select" name="prioridad" id="tarea_prioridad">
+                                <option value="alta">Alta</option>
+                                <option value="media" selected>Media</option>
+                                <option value="baja">Baja</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="tarea_estado">Estado</label>
+                            <select class="form-select" name="estado" id="tarea_estado">
+                                <option value="pendiente">Pendiente</option>
+                                <option value="en_progreso">En progreso</option>
+                                <option value="completado">Completado</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="tarea_asignado_a">Asignado a</label>
+                            <select class="form-select" name="asignado_a" id="tarea_asignado_a" required>
+                                <!-- Se llena con JS -->
+                            </select>
+                            <div class="invalid-feedback">Seleccione un responsable.</div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" form="formTarea" class="btn btn-primary" id="btnGuardarTarea">
+                    <span id="loaderTarea" class="spinner-border spinner-border-sm me-2" style="display:none;"></span>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="<?= asset('./build/js/proyectos/epicas.js') ?>"></script>
+<script src="<?= asset('./build/js/proyectos/tareas.js') ?>"></script>

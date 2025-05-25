@@ -9,6 +9,7 @@ use Controllers\EpicaController;
 use Controllers\MonitorController;
 use Controllers\ProyectoController;
 use Controllers\ProyectoPersonaController;
+use Controllers\TareaController;
 use Controllers\TerceroController;
 use Controllers\TransferenciaController;
 use MVC\Router;
@@ -51,6 +52,14 @@ $router->get('/api/epicas/listar', [EpicaController::class, 'listarAPI']);
 $router->post('/api/epicas/guardar', [EpicaController::class, 'guardarAPI']);
 $router->post('/api/epicas/modificar', [EpicaController::class, 'modificarAPI']);
 $router->post('/api/epicas/eliminar', [EpicaController::class, 'eliminarAPI']);
+
+// Rutas API para tareas
+$router->get('/api/tareas/listar', [TareaController::class, 'listarAPI']);
+$router->post('/api/tareas/guardar', [TareaController::class, 'guardarAPI']);
+$router->post('/api/tareas/modificar', [TareaController::class, 'modificarAPI']);
+$router->post('/api/tareas/eliminar', [TareaController::class, 'eliminarAPI']);
+
+$router->get('/api/proyecto-persona/listar', [ProyectoPersonaController::class, 'listar']);
 
 
 
