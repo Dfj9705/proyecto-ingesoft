@@ -20,7 +20,9 @@
                     <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalTareas">
                         <i class="fas fa-tasks me-2"></i> Ver Tareas
                     </button>
-
+                    <a href="/proyectos/kanban?id=<?= $proyecto['id'] ?>" class="btn btn-outline-secondary">
+                        <i class="fas fa-columns me-1"></i> Ir al tablero Kanban
+                    </a>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title"><?= htmlspecialchars($proyecto['nombre']) ?></h5>

@@ -1,6 +1,7 @@
 
 import Sortable from 'sortablejs';
 import { Toast } from "../funciones";
+import { Dropdown } from 'bootstrap';
 
 const proyectoId = document.getElementById('kanbanContainer').dataset.proyecto;
 const estados = ['pendiente', 'en_progreso', 'completado'];
