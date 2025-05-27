@@ -91,6 +91,7 @@ const guardarTarea = async (e) => {
     formTarea.reset();
     formTarea.classList.remove('was-validated');
     // modalTareas.hide();
+    actualizarBarraProgreso(formTarea.proyecto_id.value);
     formTarea.tarea_id.value = '';
     cargarTareas();
   }
@@ -167,6 +168,35 @@ const cargarEpicasEnSelect = async (proyecto_id) => {
       option.textContent = `${epica.titulo}`;
       select.appendChild(option);
     });
+  }
+};
+
+const actualizarBarraProgreso = async (proyecto_id) => {
+  const contenedor = document.getElementById('progresoProyecto');
+  if (!contenedor) return;
+
+  try {
+    const response = await fetch(`/api/tareas/progreso?proyecto_id=${proyecto_id}`);
+    const data = await response.json();
+
+    if (data.codigo === 1) {
+      contenedor.innerHTML = `
+        <p>
+          <span class="badge bg-secondary me-1">Pendientes: ${data.estados.pendiente}</span>
+          <span class="badge bg-primary me-1">En progreso: ${data.estados.en_progreso}</span>
+          <span class="badge bg-success">Completadas: ${data.estados.completado}</span>
+        </p>
+        <div class="progress" style="height: 20px;">
+          <div class="progress-bar bg-success" role="progressbar"
+               style="width: ${data.porcentaje}%;" aria-valuenow="${data.porcentaje}"
+               aria-valuemin="0" aria-valuemax="100">
+            ${data.porcentaje}%
+          </div>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error("Error actualizando barra de progreso:", error);
   }
 };
 

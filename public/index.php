@@ -61,6 +61,8 @@ $router->get('/api/tareas/listar/sprint', [TareaController::class, 'listarSprint
 $router->post('/api/tareas/guardar', [TareaController::class, 'guardarAPI']);
 $router->post('/api/tareas/modificar', [TareaController::class, 'modificarAPI']);
 $router->post('/api/tareas/eliminar', [TareaController::class, 'eliminarAPI']);
+$router->get('/api/tareas/progreso', [TareaController::class, 'progresoAPI']);
+
 
 $router->get('/api/proyecto-persona/listar', [ProyectoPersonaController::class, 'listar']);
 

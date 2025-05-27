@@ -229,4 +229,46 @@ class TareaController
             ]);
         }
     }
+
+    public static function progresoAPI(Router $router)
+    {
+        isAuthApi();
+        getHeadersApi();
+        header('Content-Type: application/json');
+
+        $proyecto_id = $_GET['proyecto_id'] ?? null;
+
+        if (!$proyecto_id) {
+            echo json_encode(['codigo' => 2, 'mensaje' => 'Falta ID del proyecto']);
+            return;
+        }
+
+        try {
+            $tareas = Tarea::where('proyecto_id', $proyecto_id);
+            $estados = ['pendiente' => 0, 'en_progreso' => 0, 'completado' => 0];
+
+            foreach ($tareas as $tarea) {
+                $estado = $tarea->estado;
+                if (isset($estados[$estado]))
+                    $estados[$estado]++;
+            }
+
+            $total = array_sum($estados);
+            $porcentaje = $total > 0 ? round(($estados['completado'] / $total) * 100) : 0;
+
+            echo json_encode([
+                'codigo' => 1,
+                'mensaje' => 'Progreso obtenido',
+                'estados' => $estados,
+                'porcentaje' => $porcentaje
+            ]);
+        } catch (Exception $e) {
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'Error al calcular progreso',
+                'detalle' => $e->getMessage()
+            ]);
+        }
+    }
+
 }

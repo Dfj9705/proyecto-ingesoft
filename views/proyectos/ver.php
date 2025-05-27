@@ -13,16 +13,18 @@
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
             <h5 class="card-title">Progreso del proyecto</h5>
-            <p>
-                <span class="badge bg-secondary me-1">Pendientes: <?= $estados['pendiente'] ?></span>
-                <span class="badge bg-primary me-1">En progreso: <?= $estados['en_progreso'] ?></span>
-                <span class="badge bg-success">Completadas: <?= $estados['completado'] ?></span>
-            </p>
+            <div id="progresoProyecto">
+                <p>
+                    <span class="badge bg-secondary me-1">Pendientes: <?= $estados['pendiente'] ?></span>
+                    <span class="badge bg-primary me-1">En progreso: <?= $estados['en_progreso'] ?></span>
+                    <span class="badge bg-success">Completadas: <?= $estados['completado'] ?></span>
+                </p>
 
-            <div class="progress" style="height: 20px;">
-                <div class="progress-bar bg-success" role="progressbar" style="width: <?= $porcentaje ?>%;"
-                    aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100">
-                    <?= $porcentaje ?>%
+                <div class="progress" style="height: 20px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: <?= $porcentaje ?>%;"
+                        aria-valuenow="<?= $porcentaje ?>" aria-valuemin="0" aria-valuemax="100">
+                        <?= $porcentaje ?>%
+                    </div>
                 </div>
             </div>
         </div>
