@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Model\Tarea;
 use PDO;
 use Exception;
 use MVC\Router;
@@ -239,9 +240,24 @@ class ProyectoController
             return;
         }
 
+        $tareas = Tarea::where('proyecto_id', $proyecto['id']);
+        $estados = ['pendiente' => 0, 'en_progreso' => 0, 'completado' => 0];
+
+        foreach ($tareas as $tarea) {
+            $estado = $tarea->estado;
+            if (isset($estados[$estado]))
+                $estados[$estado]++;
+        }
+
+        $total = array_sum($estados);
+        $porcentaje = $total > 0 ? round(($estados['completado'] / $total) * 100) : 0;
+
+
         $router->render('proyectos/ver', [
             'proyecto' => $proyecto,
-            'asignados' => $asignados
+            'asignados' => $asignados,
+            'estados' => $estados,
+            'porcentaje' => $porcentaje,
         ]);
     }
 
