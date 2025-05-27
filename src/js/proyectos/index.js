@@ -48,6 +48,7 @@ const datatableProyectos = new DataTable("#datatableProyectos", {
                             <li><a class="dropdown-item modificar" data-id="${id}" style="cursor:pointer"><i class="fas fa-edit me-2"></i>Modificar</a></li>
                             <li><a class="dropdown-item eliminar text-danger" data-id="${id}" style="cursor:pointer"><i class="fas fa-trash me-2"></i>Eliminar</a></li>
                             <li><a class="dropdown-item ver-asignados text-primary" data-id="${id}" style="cursor:pointer"><i class="fas fa-users me-2"></i>Ver asignados</a></li>
+                            <li><a class="dropdown-item detalle text-primary" data-id="${id}" style="cursor:pointer"><i class="fas fa-list me-2"></i>Ver proyecto</a></li>
                         </ul>
                     </div>
                 `;
@@ -379,6 +380,10 @@ formProyecto?.addEventListener("submit", guardarProyecto);
 btnModificar?.addEventListener("click", modificarProyecto);
 datatableProyectos.on("click", ".modificar", colocarDatos);
 datatableProyectos.on("click", ".eliminar", eliminarProyecto);
+datatableProyectos.on("click", ".detalle", (e) => {
+    const id = e.currentTarget.dataset.id;
+    window.location.href = `/proyectos/ver?id=${id}`;
+});
 tablaAsignados.on("click", ".editar-rol", editarRol);
 
 modalProyectoElement.addEventListener("hidden.bs.modal", refrescarModal);
