@@ -9,6 +9,7 @@ use Controllers\EpicaController;
 use Controllers\MonitorController;
 use Controllers\ProyectoController;
 use Controllers\ProyectoPersonaController;
+use Controllers\SprintController;
 use Controllers\TareaController;
 use Controllers\TerceroController;
 use Controllers\TransferenciaController;
@@ -56,12 +57,18 @@ $router->post('/api/epicas/eliminar', [EpicaController::class, 'eliminarAPI']);
 
 // Rutas API para tareas
 $router->get('/api/tareas/listar', [TareaController::class, 'listarAPI']);
+$router->get('/api/tareas/listar/sprint', [TareaController::class, 'listarSprintAPI']);
 $router->post('/api/tareas/guardar', [TareaController::class, 'guardarAPI']);
 $router->post('/api/tareas/modificar', [TareaController::class, 'modificarAPI']);
 $router->post('/api/tareas/eliminar', [TareaController::class, 'eliminarAPI']);
 
 $router->get('/api/proyecto-persona/listar', [ProyectoPersonaController::class, 'listar']);
 
+// Rutas API para sprints
+$router->get('/api/sprints/listar', [SprintController::class, 'listarAPI']);
+$router->post('/api/sprints/guardar', [SprintController::class, 'guardarAPI']);
+$router->post('/api/sprints/modificar', [SprintController::class, 'modificarAPI']);
+$router->post('/api/sprints/eliminar', [SprintController::class, 'eliminarAPI']);
 
 
 $router->comprobarRutas();

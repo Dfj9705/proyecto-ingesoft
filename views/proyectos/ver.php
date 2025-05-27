@@ -36,7 +36,10 @@
                         <i class="fas fa-layer-group me-2"></i> Gestionar Épicas
                     </button>
                     <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalTareas">
-                        <i class="fas fa-tasks me-2"></i> Ver Tareas
+                        <i class="fas fa-tasks me-2"></i> Gestionar Tareas
+                    </button>
+                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalSprints">
+                        <i class="fas fa-flag me-1"></i> Gestionar Sprints
                     </button>
                     <a href="/proyectos/kanban?id=<?= $proyecto['id'] ?>" class="btn btn-outline-secondary">
                         <i class="fas fa-columns me-1"></i> Ir al tablero Kanban
@@ -94,6 +97,14 @@
                     <?php endif; ?>
 
                     <a href="/proyectos" class="btn btn-outline-primary mt-3">Regresar a mis proyectos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card border-info">
+                <div id="contenedorAcordeonSprints" class="mt-4">
                 </div>
             </div>
         </div>
@@ -234,5 +245,59 @@
     </div>
 </div>
 
+<!-- Modal Sprints -->
+<div class="modal fade" id="modalSprints" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-primary">
+            <div class="modal-header">
+                <h5 class="modal-title">Gestión de Sprints</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Tabla -->
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered table-sm table-hover w-100" id="datatableSprints"></table>
+                </div>
+
+                <!-- Formulario -->
+                <form id="formSprint" novalidate>
+                    <input type="hidden" name="id" id="sprint_id">
+                    <input type="hidden" name="proyecto_id" value="<?= $proyecto['id'] ?>">
+
+                    <div class="mb-3">
+                        <label for="sprint_nombre">Nombre del Sprint</label>
+                        <input type="text" class="form-control" name="nombre" id="sprint_nombre" required>
+                        <div class="invalid-feedback">Ingrese un nombre.</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="sprint_fecha_inicio">Inicio</label>
+                            <input type="date" class="form-control" name="fecha_inicio" id="sprint_fecha_inicio"
+                                required>
+                        </div>
+                        <div class="col">
+                            <label for="sprint_fecha_fin">Fin</label>
+                            <input type="date" class="form-control" name="fecha_fin" id="sprint_fecha_fin" required>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button form="formSprint" class="btn btn-primary" id="btnGuardarSprint">
+                    <span id="spinnerSprint" class="spinner-border spinner-border-sm me-2"
+                        style="display: none;"></span>
+                    Guardar Sprint
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="<?= asset('./build/js/proyectos/epicas.js') ?>"></script>
 <script src="<?= asset('./build/js/proyectos/tareas.js') ?>"></script>
+<script src="<?= asset('./build/js/proyectos/sprints.js') ?>"></script>

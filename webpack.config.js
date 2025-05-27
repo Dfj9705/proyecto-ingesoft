@@ -14,6 +14,7 @@ module.exports = {
         'js/proyectos/epicas': './src/js/proyectos/epicas.js',
         'js/proyectos/tareas': './src/js/proyectos/tareas.js',
         'js/proyectos/kanban': './src/js/proyectos/kanban.js',
+        'js/proyectos/sprints': './src/js/proyectos/sprints.js',
         'css/styles': ['./src/scss/app.scss'],
     },
     output: {

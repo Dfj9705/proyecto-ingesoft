@@ -181,4 +181,49 @@ class TareaController
             ]);
         }
     }
+    /**
+     * Lista las tareas por sprint
+     */
+    public static function listarSprintAPI(Router $router)
+    {
+        isAuthApi();
+        getHeadersApi();
+        header('Content-Type: application/json');
+
+        $sprint_id = $_GET['sprint_id'] ?? null;
+
+        if (!$sprint_id) {
+            echo json_encode([
+                'codigo' => 2,
+                'mensaje' => 'Falta el ID del sprint'
+            ]);
+            return;
+        }
+
+        try {
+            $db = Tarea::getDB();
+            $sql = "SELECT tareas.*, usuarios.nombre AS asignado_nombre
+                FROM tareas
+                LEFT JOIN usuarios ON tareas.asignado_a = usuarios.id
+                WHERE tareas.sprint_id = ?
+                ORDER BY tareas.creado_en DESC";
+
+            $stmt = $db->prepare($sql);
+            $stmt->execute([$sprint_id]);
+            $tareas = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            echo json_encode([
+                'codigo' => 1,
+                'mensaje' => 'Tareas encontradas',
+                'datos' => $tareas
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'Error al consultar tareas',
+                'detalle' => $e->getMessage()
+            ]);
+        }
+    }
 }
