@@ -18,6 +18,8 @@ const datatableTareas = new DataTable('#datatableTareas', {
     { title: "Estado", data: "estado" },
     { title: "Prioridad", data: "prioridad" },
     { title: "Asignado", data: "asignado_nombre" },
+    { title: "Epica", data: "epica_id", render: (data, type, row) => row.epica_titulo || 'Sin épica' },
+    { title: "Sprint", data: "sprint_id", render: (data, type, row) => row.sprint_nombre || 'Sin sprint' },
     {
       title: "Acciones",
       data: "id",
@@ -35,7 +37,7 @@ const cargarTareas = async () => {
   const url = `/api/tareas/listar?proyecto_id=${proyecto_id}`;
   const response = await fetch(url);
   const data = await response.json();
-
+  console.log(data)
   if (data.codigo === 1) {
     datatableTareas.clear().rows.add(data.datos).draw();
   } else {
@@ -105,6 +107,7 @@ const editarTarea = (e) => {
   formTarea.titulo.value = row.titulo;
   formTarea.descripcion.value = row.descripcion;
   formTarea.sprint_id.value = row.sprint_id;
+  formTarea.epica_id_tarea.value = row.epica_id;
   formTarea.estado.value = row.estado;
   formTarea.prioridad.value = row.prioridad;
   formTarea.asignado_a.value = row.asignado_a;
@@ -147,6 +150,25 @@ const cargarSprintsEnSelect = async (proyecto_id) => {
     });
   }
 };
+const cargarEpicasEnSelect = async (proyecto_id) => {
+  const select = document.getElementById('epica_id_tarea');
+  if (!select) return;
+
+  const url = `/api/epicas/listar?proyecto_id=${proyecto_id}`;
+  const response = await fetch(url);
+  const data = await response.json();
+
+  if (data.codigo === 1) {
+    select.innerHTML = '<option value="">-- Sin épica --</option>';
+
+    data.datos.forEach(epica => {
+      const option = document.createElement('option');
+      option.value = epica.id;
+      option.textContent = `${epica.titulo}`;
+      select.appendChild(option);
+    });
+  }
+};
 
 formTarea.addEventListener('submit', guardarTarea);
 modalTareasElement.addEventListener('show.bs.modal', (e) => {
@@ -154,6 +176,7 @@ modalTareasElement.addEventListener('show.bs.modal', (e) => {
   cargarTareas();
   cargarUsuariosProyecto();
   cargarSprintsEnSelect(proyecto_id)
+  cargarEpicasEnSelect(proyecto_id)
   formTarea.tarea_id.value = '';
   formTarea.reset();
 });

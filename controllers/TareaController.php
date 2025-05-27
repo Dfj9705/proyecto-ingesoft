@@ -32,9 +32,12 @@ class TareaController
         }
 
         try {
-            $sql = "SELECT tareas.*, usuarios.nombre AS asignado_nombre
+            $sql = "SELECT tareas.*, usuarios.nombre AS asignado_nombre, epicas.titulo AS epica_titulo, sprints.nombre AS sprint_nombre 
                     FROM tareas
                     LEFT JOIN usuarios ON usuarios.id = tareas.asignado_a
+                    LEFT JOIN epicas on epicas.id = tareas.epica_id
+                    LEFT JOIN sprints on sprints.id = tareas.sprint_id
+            
                     WHERE tareas.proyecto_id = ?";
 
             $stmt = Tarea::getDB()->prepare($sql);
@@ -210,7 +213,7 @@ class TareaController
 
             $stmt = $db->prepare($sql);
             $stmt->execute([$sprint_id]);
-            $tareas = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $tareas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             echo json_encode([
                 'codigo' => 1,

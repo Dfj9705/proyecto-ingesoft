@@ -184,6 +184,8 @@
                                 <th>Título</th>
                                 <th>Estado</th>
                                 <th>Prioridad</th>
+                                <th>Épica</th>
+                                <th>Sprint</th>
                                 <th>Asignado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -210,6 +212,13 @@
                         <label for="sprint_id">Sprint</label>
                         <select name="sprint_id" id="sprint_id" class="form-select">
                             <option value="">-- Sin sprint --</option>
+                            <!-- Opciones se llenan por JS -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="epica_id">Epica</label>
+                        <select name="epica_id" id="epica_id_tarea" class="form-select">
+                            <option value="">-- Sin epica --</option>
                             <!-- Opciones se llenan por JS -->
                         </select>
                     </div>
