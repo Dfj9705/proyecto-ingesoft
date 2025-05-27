@@ -35,7 +35,8 @@
                     <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEpicas">
                         <i class="fas fa-layer-group me-2"></i> Gestionar Épicas
                     </button>
-                    <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalTareas">
+                    <button class="btn btn-outline-info" data-bs-toggle="modal" data-proyecto="<?= $proyecto['id'] ?>"
+                        data-bs-target="#modalTareas">
                         <i class="fas fa-tasks me-2"></i> Gestionar Tareas
                     </button>
                     <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalSprints">
@@ -205,6 +206,14 @@
                         <label for="tarea_descripcion">Descripción</label>
                         <textarea class="form-control" name="descripcion" id="tarea_descripcion" rows="3"></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="sprint_id">Sprint</label>
+                        <select name="sprint_id" id="sprint_id" class="form-select">
+                            <option value="">-- Sin sprint --</option>
+                            <!-- Opciones se llenan por JS -->
+                        </select>
+                    </div>
+
 
                     <div class="row mb-3">
                         <div class="col-sm-4">

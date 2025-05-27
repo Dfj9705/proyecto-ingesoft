@@ -104,6 +104,7 @@ const editarTarea = (e) => {
   formTarea.id.value = row.id;
   formTarea.titulo.value = row.titulo;
   formTarea.descripcion.value = row.descripcion;
+  formTarea.sprint_id.value = row.sprint_id;
   formTarea.estado.value = row.estado;
   formTarea.prioridad.value = row.prioridad;
   formTarea.asignado_a.value = row.asignado_a;
@@ -128,11 +129,31 @@ const eliminarTarea = async (e) => {
   if (data.codigo === 1) cargarTareas();
 };
 
+const cargarSprintsEnSelect = async (proyecto_id) => {
+  const select = document.getElementById('sprint_id');
+  if (!select) return;
+
+  const url = `/api/sprints/listar?proyecto_id=${proyecto_id}`;
+  const response = await fetch(url);
+  const data = await response.json();
+
+  if (data.codigo === 1) {
+    select.innerHTML = '<option value="">-- Sin sprint --</option>';
+    data.datos.forEach(sprint => {
+      const option = document.createElement('option');
+      option.value = sprint.id;
+      option.textContent = `${sprint.nombre} (${sprint.fecha_inicio} - ${sprint.fecha_fin})`;
+      select.appendChild(option);
+    });
+  }
+};
 
 formTarea.addEventListener('submit', guardarTarea);
-modalTareasElement.addEventListener('show.bs.modal', () => {
+modalTareasElement.addEventListener('show.bs.modal', (e) => {
+  const proyecto_id = e.relatedTarget.dataset.proyecto
   cargarTareas();
   cargarUsuariosProyecto();
+  cargarSprintsEnSelect(proyecto_id)
   formTarea.tarea_id.value = '';
   formTarea.reset();
 });
