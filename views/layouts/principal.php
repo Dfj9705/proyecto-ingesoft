@@ -98,8 +98,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/monitor">
-                                <i class="bi bi-circle"></i><span>Monitor</span>
+                            <a href="/dashboard">
+                                <i class="bi bi-circle"></i><span>Dashboard</span>
                             </a>
                         </li>
 

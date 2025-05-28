@@ -5,6 +5,7 @@ use Controllers\AdminController;
 use Controllers\AuthController;
 use Controllers\CajeroController;
 use Controllers\CuentaController;
+use Controllers\DashboardController;
 use Controllers\EpicaController;
 use Controllers\MonitorController;
 use Controllers\ProyectoController;
@@ -71,6 +72,12 @@ $router->get('/api/sprints/listar', [SprintController::class, 'listarAPI']);
 $router->post('/api/sprints/guardar', [SprintController::class, 'guardarAPI']);
 $router->post('/api/sprints/modificar', [SprintController::class, 'modificarAPI']);
 $router->post('/api/sprints/eliminar', [SprintController::class, 'eliminarAPI']);
+
+$router->get('/dashboard', [DashboardController::class, 'index']);
+$router->get('/api/dashboard/tareas-por-estado', [DashboardController::class, 'tareasPorEstadoGeneralAPI']);
+$router->get('/api/dashboard/tareas-por-usuario', [DashboardController::class, 'tareasPorUsuarioGeneralAPI']);
+$router->get('/api/dashboard/tareas-por-proyecto', [DashboardController::class, 'tareasPorProyectoGeneralAPI']);
+
 
 
 $router->comprobarRutas();

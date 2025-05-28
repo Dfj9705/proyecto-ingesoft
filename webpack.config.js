@@ -15,6 +15,7 @@ module.exports = {
         'js/proyectos/tareas': './src/js/proyectos/tareas.js',
         'js/proyectos/kanban': './src/js/proyectos/kanban.js',
         'js/proyectos/sprints': './src/js/proyectos/sprints.js',
+        'js/dashboard-general': './src/js/dashboard-general.js',
         'css/styles': ['./src/scss/app.scss'],
     },
     output: {
