@@ -89,7 +89,7 @@
             <ul class="sidebar-nav" id="sidebar-nav">
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-target="#administracion" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-gear"></i><span>Administración</span><i class="bi bi-chevron-down ms-auto"></i>
+                        <i class="bi bi-gear"></i><span>Proyectos</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
                     <ul id="administracion" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         <li>
@@ -99,7 +99,7 @@
                         </li>
                         <li>
                             <a href="/dashboard">
-                                <i class="bi bi-circle"></i><span>Dashboard</span>
+                                <i class="bi bi-circle"></i><span>Monitor</span>
                             </a>
                         </li>
 
