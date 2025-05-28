@@ -45,3 +45,26 @@
   .kanban-list .kanban-card:last-child {
     margin-bottom: 0;
   }
+
+  .blink {
+  animation: blink-animation 1s steps(2, start) infinite;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
+.blink-fade {
+  animation: blink-fade-animation 1.5s ease-in-out infinite;
+}
+
+@keyframes blink-fade-animation {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}

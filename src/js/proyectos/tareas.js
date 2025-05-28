@@ -10,6 +10,9 @@ const btnGuardarTarea = document.getElementById('btnGuardarTarea');
 const loaderTarea = document.getElementById('loaderTarea');
 const textTituloTarea = document.getElementById('tarea_titulo');
 const selectResponsable = document.getElementById('tarea_asignado_a');
+const iconoIA = document.getElementById('iconoIA');
+
+iconoIA.style.display = 'none'; // Ocultar icono IA por defecto
 
 const datatableTareas = new DataTable('#datatableTareas', {
   data: [],
@@ -91,6 +94,7 @@ const guardarTarea = async (e) => {
     formTarea.reset();
     formTarea.classList.remove('was-validated');
     // modalTareas.hide();
+    iconoIA.style.display = 'none';
     actualizarBarraProgreso(formTarea.proyecto_id.value);
     formTarea.tarea_id.value = '';
     cargarTareas();
@@ -103,7 +107,7 @@ const guardarTarea = async (e) => {
 const editarTarea = (e) => {
   const tr = e.currentTarget.closest('tr');
   const row = datatableTareas.row(tr).data();
-
+  iconoIA.style.display = 'none';
   formTarea.id.value = row.id;
   formTarea.titulo.value = row.titulo;
   formTarea.descripcion.value = row.descripcion;
@@ -217,6 +221,7 @@ const sugerirPrioridad = async (e) => {
     const data = await response.json();
     if (data.codigo === 1) {
       formTarea.tarea_prioridad.value = data.prioridad;
+      iconoIA.style.display = '';
     } else {
       formTarea.tarea_prioridad.value = '';
     }
@@ -234,6 +239,7 @@ modalTareasElement.addEventListener('show.bs.modal', (e) => {
   cargarUsuariosProyecto();
   cargarSprintsEnSelect(proyecto_id)
   cargarEpicasEnSelect(proyecto_id)
+  iconoIA.style.display = 'none';
   formTarea.tarea_id.value = '';
   formTarea.reset();
 });
