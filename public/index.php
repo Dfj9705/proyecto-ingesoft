@@ -63,6 +63,7 @@ $router->post('/api/tareas/guardar', [TareaController::class, 'guardarAPI']);
 $router->post('/api/tareas/modificar', [TareaController::class, 'modificarAPI']);
 $router->post('/api/tareas/eliminar', [TareaController::class, 'eliminarAPI']);
 $router->get('/api/tareas/progreso', [TareaController::class, 'progresoAPI']);
+$router->post('/api/tareas/sugerir-prioridad', [TareaController::class, 'clasificarPrioridadAPI']);
 
 
 $router->get('/api/proyecto-persona/listar', [ProyectoPersonaController::class, 'listar']);
@@ -77,6 +78,8 @@ $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/api/dashboard/tareas-por-estado', [DashboardController::class, 'tareasPorEstadoGeneralAPI']);
 $router->get('/api/dashboard/tareas-por-usuario', [DashboardController::class, 'tareasPorUsuarioGeneralAPI']);
 $router->get('/api/dashboard/tareas-por-proyecto', [DashboardController::class, 'tareasPorProyectoGeneralAPI']);
+
+$router->get('/entrenar', [AppController::class, 'entrenarPrioridad']);
 
 
 

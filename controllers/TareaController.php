@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Classes\PrioridadML;
 use Model\Tarea;
 use MVC\Router;
 use Exception;
@@ -82,7 +83,7 @@ class TareaController
         try {
             $tarea = new Tarea($data);
             $tarea->crear();
-
+            PrioridadML::entrenar();
             echo json_encode([
                 'codigo' => 1,
                 'mensaje' => 'Tarea creada correctamente'
@@ -127,7 +128,7 @@ class TareaController
 
             $tarea->sincronizar($data);
             $tarea->actualizar();
-
+            PrioridadML::entrenar();
             echo json_encode([
                 'codigo' => 1,
                 'mensaje' => 'Tarea actualizada correctamente'
@@ -267,6 +268,39 @@ class TareaController
                 'codigo' => 0,
                 'mensaje' => 'Error al calcular progreso',
                 'detalle' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public static function clasificarPrioridadAPI(Router $router)
+    {
+        isAuthApi();
+        getHeadersApi();
+        header('Content-Type: application/json');
+
+        $texto = $_POST['titulo'] ?? null;
+
+        if (!$texto) {
+            echo json_encode([
+                'codigo' => 2,
+                'mensaje' => 'Texto requerido para clasificación'
+            ]);
+            return;
+        }
+
+        try {
+            $prioridad = PrioridadML::clasificarPrioridad($texto);
+            PrioridadML::entrenar();
+            echo json_encode([
+                'codigo' => 1,
+                'mensaje' => 'Prioridad clasificada',
+                'prioridad' => $prioridad
+            ]);
+        } catch (Exception $e) {
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'Error al clasificar prioridad',
+                'detalle' => $e->getTraceAsString()
             ]);
         }
     }

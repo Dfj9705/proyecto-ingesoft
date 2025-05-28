@@ -8,6 +8,7 @@ const modalTareas = new Modal(modalTareasElement);
 const formTarea = document.getElementById('formTarea');
 const btnGuardarTarea = document.getElementById('btnGuardarTarea');
 const loaderTarea = document.getElementById('loaderTarea');
+const textTituloTarea = document.getElementById('tarea_titulo');
 const selectResponsable = document.getElementById('tarea_asignado_a');
 
 const datatableTareas = new DataTable('#datatableTareas', {
@@ -200,6 +201,34 @@ const actualizarBarraProgreso = async (proyecto_id) => {
   }
 };
 
+const sugerirPrioridad = async (e) => {
+  const titulo = e.target.value.trim();
+  if (!titulo) {
+    formTarea.prioridad.value = '';
+    return;
+  }
+  const body = new FormData();
+  body.append('titulo', titulo);
+  const url = `/api/tareas/sugerir-prioridad`;
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: body
+    });
+    const data = await response.json();
+    console.log(data);
+    if (data.codigo === 1) {
+      formTarea.tarea_prioridad.value = data.prioridad;
+    } else {
+      formTarea.tarea_prioridad.value = '';
+    }
+  } catch (error) {
+    console.error("Error sugiriendo prioridad:", error);
+    formTarea.tarea_prioridad.value = '';
+  }
+}
+
+
 formTarea.addEventListener('submit', guardarTarea);
 modalTareasElement.addEventListener('show.bs.modal', (e) => {
   const proyecto_id = e.relatedTarget.dataset.proyecto
@@ -212,3 +241,4 @@ modalTareasElement.addEventListener('show.bs.modal', (e) => {
 });
 datatableTareas.on('click', '.editar', editarTarea);
 datatableTareas.on('click', '.eliminar', eliminarTarea);
+textTituloTarea.addEventListener('change', sugerirPrioridad)

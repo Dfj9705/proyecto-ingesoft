@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Classes\PrioridadML;
 use Model\ProyectoPersona;
 use MVC\Router;
 use Exception;
@@ -46,6 +47,23 @@ class AppController
         $router->render('pages/index', [
             'proyectos' => $proyectos
         ]);
+    }
+
+    public static function entrenarPrioridad()
+    {
+        try {
+            PrioridadML::entrenar();
+            echo json_encode([
+                'codigo' => 1,
+                'mensaje' => 'Modelo entrenado correctamente'
+            ]);
+        } catch (Exception $e) {
+            echo json_encode([
+                'codigo' => 0,
+                'mensaje' => 'Error al entrenar el modelo',
+                'detalle' => $e->getMessage()
+            ]);
+        }
     }
 
 
