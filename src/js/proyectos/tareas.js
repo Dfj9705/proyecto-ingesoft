@@ -38,7 +38,6 @@ const cargarTareas = async () => {
   const url = `/api/tareas/listar?proyecto_id=${proyecto_id}`;
   const response = await fetch(url);
   const data = await response.json();
-  console.log(data)
   if (data.codigo === 1) {
     datatableTareas.clear().rows.add(data.datos).draw();
   } else {
@@ -216,7 +215,6 @@ const sugerirPrioridad = async (e) => {
       body: body
     });
     const data = await response.json();
-    console.log(data);
     if (data.codigo === 1) {
       formTarea.tarea_prioridad.value = data.prioridad;
     } else {
