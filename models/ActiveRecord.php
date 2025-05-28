@@ -2,6 +2,7 @@
 
 namespace Model;
 
+use Exception;
 use InvalidArgumentException;
 use PDO;
 use PDOException;
@@ -129,7 +130,9 @@ class ActiveRecord
             $id = self::$db->lastInsertId();
             return ['resultado' => true, 'id' => $id];
         } catch (PDOException $e) {
-            return ['resultado' => false, 'error' => $e->getMessage()];
+            throw new Exception($e->getMessage(), 1);
+
+            // return ['resultado' => false, 'error' => $e->getMessage()];
         }
     }
 

@@ -229,7 +229,7 @@
                     <div class="row mb-3">
                         <div class="col-sm-4">
                             <label for="tarea_prioridad">Prioridad <i id="iconoIA"
-                                    class="fas fa-brain text-info blink-fade"></i></label>
+                                    class="bi bi-stars text-info blink-fade"></i></label>
                             <select class="form-select" name="prioridad" id="tarea_prioridad">
                                 <option value="alta">Alta</option>
                                 <option value="media">Media</option>
